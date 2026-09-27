@@ -65,11 +65,10 @@
             color: var(--primary);
         }
 
-        /* 3. 首頁全螢幕封面背景 */
+        /* 3. 首頁全螢幕封面背景 (更新為新封面) */
         .hero {
             height: 100vh;
-            /* 提醒：若 postimg 無法直接顯示，請確認網址結尾有 .jpg，這裡為您加上 .jpg 後綴測試 */
-            background-image: url('https://i.postimg.cc/9RVHNCx1.jpg'), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80');
+            background-image: url('https://i.postimg.cc/SxcW2y72/ART-1360.jpg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -84,7 +83,7 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.25);
             z-index: 1;
         }
 
@@ -118,9 +117,9 @@
         }
 
         .time-card {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 8px 24px rgba(212, 163, 115, 0.2); /* 柔和陰影 Soft Shadow */
-            border-radius: 12px; /* 圓角設計 */
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 24px rgba(212, 163, 115, 0.2); 
+            border-radius: 12px; 
             padding: 15px 25px;
             display: flex;
             align-items: center;
@@ -139,7 +138,7 @@
         .time-card .divider {
             width: 1px;
             height: 35px;
-            background-color: var(--secondary); /* 垂直細線分隔 */
+            background-color: var(--secondary);
             margin: 0 15px;
             opacity: 0.4;
         }
@@ -158,6 +157,21 @@
             margin: 0 auto;
         }
 
+        /* 底部照片區塊專用間距 */
+        .bottom-photo-section {
+            padding: 0 20px 100px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .bottom-image {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+            display: block;
+        }
+
         .v-card {
             background: white;
             border: 1px solid rgba(212, 163, 115, 0.3);
@@ -165,7 +179,6 @@
             padding: 50px 40px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.04);
             text-align: center;
-            margin-bottom: 40px;
         }
 
         .section-title {
@@ -234,6 +247,7 @@
             font-size: 0.95rem;
         }
 
+        /* 確保 Google Map 完美呈現的容器 */
         .map-container {
             position: relative;
             padding-bottom: 56.25%; /* 16:9 比例 */
@@ -241,6 +255,7 @@
             overflow: hidden;
             border-radius: 8px;
             margin-top: 15px;
+            border: 1px solid #eaeaea;
         }
 
         .map-container iframe {
@@ -252,7 +267,7 @@
             border: 0;
         }
 
-        /* 4. & 8. 表單區塊與中英雙語標籤 */
+        /* 4. & 8. 表單區塊 */
         .form-container {
             text-align: left;
         }
@@ -333,18 +348,19 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        /* 手機版響應式 */
         @media (max-width: 600px) {
             .hero h1 { font-size: 3rem; }
             .time-card { min-width: 100px; padding: 12px 15px; }
             .time-card .number { font-size: 1.5rem; }
-            section { padding: 80px 15px; }
+            section { padding: 60px 15px; }
+            .bottom-photo-section { padding: 0 15px 80px 15px; }
             .v-card { padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. 毛玻璃導航列 -->
     <nav>
         <ul>
             <li><a href="#about">關於我們</a></li>
@@ -353,20 +369,17 @@
         </ul>
     </nav>
 
-    <!-- 封面區塊 -->
     <header class="hero" id="about">
         <div class="hero-content">
             <h1>Charlie & Livia</h1>
             <p>WE ARE GETTING MARRIED</p>
             
-            <!-- 2. 具備藝術感的計時器 -->
             <div class="countdown-container" id="countdown">
                 <!-- Javascript 將動態渲染微光卡片 -->
             </div>
         </div>
     </header>
 
-    <!-- 3. 垂直 V-Card 婚禮詳情 -->
     <section id="details">
         <div class="v-card">
             <h2 class="section-title">Wedding Details</h2>
@@ -387,8 +400,7 @@
                 <p>邀請您穿著包含 <span style="color: var(--secondary); font-weight: 600;">白色 (White)</span> 元素的服飾，<br>與我們一同沉浸在純粹優雅的美學中。</p>
             </div>
 
-            <!-- 7. 摺疊式面板 交通指引與 Google Map -->
-            <details class="accordion">
+            <details class="accordion" open>
                 <summary>交通指引 <span class="serif-en">Transportation</span></summary>
                 <div class="accordion-content">
                     <br>
@@ -397,26 +409,22 @@
                     <p>【開車前往】<br>飯店設有地下停車場，請於離場時至招待桌領取停車折抵。</p>
                     
                     <div class="map-container">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3613.250550882194!2d121.5250493!3d25.0933405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442aebb02b36a19%3A0xe543e86c0fbbe9cd!2sRenaissance%20Taipei%20Shihlin%20Hotel!5e0!3m2!1sen!2stw!4v1700000000000!5m2!1sen!2stw" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://maps.google.com/maps?q=台北士林萬麗酒店&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
             </details>
         </div>
     </section>
 
-    <!-- 出席回函表單 -->
     <section id="rsvp">
         <div class="v-card form-container">
             <h2 class="section-title" style="text-align: center;">R.S.V.P.</h2>
             <p style="text-align: center; margin-bottom: 30px; color: var(--text-light);">期待與您分享我們的喜悅</p>
 
-            <!-- 5. 隱藏式 Iframe 提交技術 -->
             <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted){alert('感謝您的回覆！我們期待與您相見。'); window.location.reload();}"></iframe>
             
-            <!-- 將 viewresponse 改為 formResponse 以正確提交表單 -->
             <form action="https://docs.google.com/forms/d/e/1FAIpQLSe-idpi_fNAr17N1fPW4aF88gNNwXDyx6FAayLoGVoiM-STBQ/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
                 
-                <!-- 4. 中英雙語標籤 (提取 ID 且絕無預填值) -->
                 <div class="form-group">
                     <label>姓名 <span class="en">NAME</span></label>
                     <input type="text" name="entry.1801164509" required> 
@@ -444,7 +452,6 @@
                     <input type="number" id="guestCount" name="entry.1302847197" min="0" required>
                 </div>
 
-                <!-- 8. 智能表單邏輯區塊：根據人數隱藏/顯示 -->
                 <div id="conditional-fields">
                     <div class="form-group">
                         <label>飲食需求 <span class="en">DIETARY REQUIREMENTS</span></label>
@@ -476,11 +483,14 @@
         </div>
     </section>
 
+    <!-- 新增的底部結尾照片區塊 -->
+    <div class="bottom-photo-section">
+        <img src="https://i.postimg.cc/d1VdxGM4/ART-1134.jpg" alt="Charlie & Livia" class="bottom-image">
+    </div>
+
     <script>
-        // 5. 隱藏 iframe 表單送出變數
         var submitted = false;
 
-        // 8. 智能表單邏輯：參加人數 > 0 時顯示飲食與兒童椅選項
         const guestInput = document.getElementById('guestCount');
         const conditionalFields = document.getElementById('conditional-fields');
 
@@ -493,7 +503,6 @@
             }
         });
 
-        // 倒數計時器邏輯
         const weddingDate = new Date("2027-02-21T12:00:00").getTime();
         
         function updateCountdown() {
@@ -530,8 +539,8 @@
             `;
         }
         
-        setInterval(updateCountdown, 60000); // 每分鐘更新一次即可
-        updateCountdown(); // 初始化呼叫
+        setInterval(updateCountdown, 60000); 
+        updateCountdown(); 
     </script>
 </body>
 </html>
