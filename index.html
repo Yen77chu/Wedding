@@ -167,7 +167,7 @@
         /* ========================================= */
         .hero-countdown-wrapper {
             position: absolute;
-            bottom: 10vh; 
+            bottom: 8vh; /* 稍微往上一點避免太貼邊 */
             left: 0;
             width: 100%;
             z-index: 2;
@@ -208,13 +208,12 @@
         /* 共用與其他區塊 */
         /* ========================================= */
         .section-container {
-            padding: 100px 20px 40px 20px; /* 縮小下方空間 */
+            padding: 100px 20px 40px 20px; 
             max-width: 800px;
             margin: 0 auto;
             text-align: center;
         }
 
-        /* ★ 特殊調整：讓出席回函區塊更靠近上方 */
         .section-container-rsvp {
             padding: 30px 20px 100px 20px; 
             max-width: 800px;
@@ -291,12 +290,17 @@
             margin-bottom: 15px; 
         }
 
+        /* ★ 鎖定卡片內日期字型與大小，解決 (日) 變大的問題 */
         .card-date-line {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 600;
             font-size: 1.15rem;
             color: var(--primary);
             letter-spacing: 1px;
+        }
+        .card-date-line span {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 1.05rem; /* 讓中文括號跟隨主體比例 */
         }
 
         .card-body p {
@@ -458,7 +462,6 @@
             flex: 1;
         }
 
-        /* ★ 喜帖形式選項：間距再縮短 */
         .checkbox-group {
             display: flex;
             flex-direction: column;
@@ -493,7 +496,6 @@
             margin-top: 50px;
         }
 
-        /* ★ 按鈕字體加粗 (font-weight: 600) */
         .submit-btn {
             display: inline-block;
             width: auto;
@@ -504,7 +506,7 @@
             border: none;
             border-radius: 50px; 
             font-size: 0.95rem;
-            font-weight: 600; /* 加粗字體 */
+            font-weight: 600; 
             letter-spacing: 4px;
             cursor: pointer;
             transition: opacity 0.3s, transform 0.2s;
@@ -563,19 +565,24 @@
                 letter-spacing: 6px; 
                 margin-bottom: 25px; 
             } 
+            
+            /* ★ 確保手機版主標題在同一行，字級微調 */
             .hero-content h1 { 
-                font-size: 4rem; 
+                font-size: 3.2rem; 
+                white-space: nowrap; 
                 margin: 0 0 10px 0; 
             }
+            
             .hero-content p.quote { 
                 font-size: 14px; 
                 letter-spacing: 3px; 
             }
             
-            .hero-countdown-wrapper { bottom: 6vh; }
-            .hero-countdown-timer .num { font-size: 1.6rem; }
-            .hero-countdown-timer .unit { font-size: 0.75rem; }
-            .hero-countdown-timer .divider { margin: 0 5px; }
+            /* ★ 手機版計時器不上不下，收窄間距防貼邊 */
+            .hero-countdown-wrapper { bottom: 5vh; }
+            .hero-countdown-timer .num { font-size: 1.45rem; }
+            .hero-countdown-timer .unit { font-size: 0.7rem; }
+            .hero-countdown-timer .divider { margin: 0 5px; font-size: 1.2rem; }
             
             .section-container { padding: 80px 15px 20px 15px; }
             .section-container-rsvp { padding: 20px 15px 80px 15px; }
@@ -632,7 +639,7 @@
                         <p class="sub">The Wedding Banquet</p>
                     </div>
                     <div class="card-date-line">
-                        | 02.21.2027 (日)
+                        | 02.21.2027 <span>(日)</span>
                     </div>
                 </div>
                 
@@ -657,7 +664,7 @@
         </div>
     </section>
 
-    <!-- 出席回函 (RSVP) 區塊：上移緊湊版 -->
+    <!-- 出席回函 (RSVP) 區塊 -->
     <section id="rsvp" class="section-container-rsvp">
         <div style="max-width: 700px; margin: 0 auto;">
             
