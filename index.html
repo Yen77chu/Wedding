@@ -163,14 +163,19 @@
         }
 
         /* ========================================= */
-        /* 3. 倒數計時器 */
+        /* 3. 倒數計時器 (預設 PC 版：固定在底部) */
         /* ========================================= */
         .hero-countdown-wrapper {
             position: absolute;
-            bottom: 8vh; /* 稍微往上一點避免太貼邊 */
+            bottom: 8vh; 
             left: 0;
             width: 100%;
             z-index: 2;
+        }
+
+        /* 手機版倒數容器預設隱藏，透過 Media Query 控制 */
+        .hero-countdown-mobile {
+            display: none;
         }
 
         .hero-countdown-timer {
@@ -290,7 +295,6 @@
             margin-bottom: 15px; 
         }
 
-        /* ★ 鎖定卡片內日期字型與大小，解決 (日) 變大的問題 */
         .card-date-line {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 600;
@@ -300,7 +304,7 @@
         }
         .card-date-line span {
             font-family: 'Noto Serif TC', serif;
-            font-size: 1.05rem; /* 讓中文括號跟隨主體比例 */
+            font-size: 1.05rem; 
         }
 
         .card-body p {
@@ -558,7 +562,7 @@
                 height: 100vh; 
             }
 
-            .hero-content { transform: translateY(2%); } 
+            .hero-content { transform: translateY(-2%); } 
             
             .hero-content p.date { 
                 font-size: 1.1rem; 
@@ -566,7 +570,6 @@
                 margin-bottom: 25px; 
             } 
             
-            /* ★ 確保手機版主標題在同一行，字級微調 */
             .hero-content h1 { 
                 font-size: 3.2rem; 
                 white-space: nowrap; 
@@ -576,11 +579,20 @@
             .hero-content p.quote { 
                 font-size: 14px; 
                 letter-spacing: 3px; 
+                margin-bottom: 25px; /* 與花束下方的計時器拉開距離 */
             }
             
-            /* ★ 手機版計時器不上不下，收窄間距防貼邊 */
-            .hero-countdown-wrapper { bottom: 5vh; }
-            .hero-countdown-timer .num { font-size: 1.45rem; }
+            /* ★ 手機版：隱藏 PC 版底部計時器，顯示花束下方的移動版計時器 */
+            .hero-countdown-wrapper { display: none; }
+            .hero-countdown-mobile {
+                display: block;
+                position: relative;
+                z-index: 2;
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .hero-countdown-mobile .hero-countdown-timer .num { font-size: 1.45rem; }
             .hero-countdown-timer .unit { font-size: 0.7rem; }
             .hero-countdown-timer .divider { margin: 0 5px; font-size: 1.2rem; }
             
@@ -620,7 +632,12 @@
             <p class="date">02.21.2027</p>
             <h1>Charlie & Livia</h1>
             <p class="quote">誠摯邀請您 一同見證我們的下一頁</p>
+            
+            <!-- ★ 手機版專屬倒數計時器（位於花束下方空白處） -->
+            <div class="hero-countdown-mobile" id="countdown-mobile"></div>
         </div>
+        
+        <!-- PC 版倒數計時器（固定在畫面底部） -->
         <div class="hero-countdown-wrapper" id="countdown"></div>
     </header>
 
@@ -674,9 +691,8 @@
             </div>
 
             <div class="rsvp-card">
-                <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted){alert('感謝您的回覆，我們已收到您的祝福。期待與您分享這份喜悅！'); window.location.reload();}"></iframe>
-                
-                <form action="https://docs.google.com/forms/d/e/1FAIpQLSe-idpi_fNAr17N1fPW4aF88gNNwXDyx6FAayLoGVoiM-STBQ/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+                <!-- ★ 改為 JavaScript 非同步提交，完美串接 Google 表單 -->
+                <form id="rsvpForm">
                     
                     <div class="form-group">
                         <label>姓名 <span class="en">NAME</span></label>
@@ -755,7 +771,7 @@
                     </div>
 
                     <div class="submit-btn-container">
-                        <button type="submit" class="submit-btn">確認送出 SUBMIT</button>
+                        <button type="submit" class="submit-btn" id="submitBtn">確認送出 SUBMIT</button>
                     </div>
                 </form>
             </div>
@@ -768,8 +784,6 @@
     </div>
 
     <script>
-        var submitted = false;
-
         const guestInput = document.getElementById('guestCount');
         const conditionalFields = document.getElementById('conditional-fields');
 
@@ -780,6 +794,31 @@
             } else {
                 conditionalFields.style.display = 'none';
             }
+        });
+
+        // ★ Google 表單非同步送出邏輯 (完美繞過 CORS 限制)
+        document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = '傳送中...';
+
+            const formData = new FormData(this);
+            const actionUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe-idpi_fNAr17N1fPW4aF88gNNwXDyx6FAayLoGVoiM-STBQ/formResponse';
+
+            fetch(actionUrl, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // 關鍵：略過跨域檢查
+            }).then(() => {
+                alert('感謝您的回覆，我們已收到您的祝福。期待與您分享這份喜悅！');
+                window.location.reload();
+            }).catch((error) => {
+                console.error('Error:', error);
+                alert('送出時發生了一點小狀況，請再試一次或直接聯繫新人！');
+                btn.disabled = false;
+                btn.innerText = '確認送出 SUBMIT';
+            });
         });
 
         function toggleTransport() {
@@ -802,7 +841,9 @@
             const distance = weddingDate - now;
 
             if (distance < 0) {
-                document.getElementById("countdown").innerHTML = "<div class='hero-countdown-timer'><span class='num'>Just Married!</span></div>";
+                const expiredHtml = "<div class='hero-countdown-timer'><span class='num'>Just Married!</span></div>";
+                document.getElementById("countdown").innerHTML = expiredHtml;
+                document.getElementById("countdown-mobile").innerHTML = expiredHtml;
                 return;
             }
 
@@ -813,7 +854,7 @@
 
             const format = (num) => num.toString().padStart(2, '0');
 
-            document.getElementById("countdown").innerHTML = `
+            const countdownHtml = `
                 <div class="hero-countdown-timer">
                     <span class="num">${days}</span> <span class="unit">Days</span>
                     <span class="divider">|</span>
@@ -824,6 +865,9 @@
                     <span class="num">${format(seconds)}</span> <span class="unit">Sec</span>
                 </div>
             `;
+
+            document.getElementById("countdown").innerHTML = countdownHtml;
+            document.getElementById("countdown-mobile").innerHTML = countdownHtml;
         }
         
         setInterval(updateCountdown, 1000); 
